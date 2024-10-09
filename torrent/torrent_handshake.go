@@ -1,8 +1,6 @@
 package torrent
 
 import (
-	"net"
-
 	"github.com/cenkalti/rain/internal/handshaker/incominghandshaker"
 	"github.com/cenkalti/rain/internal/handshaker/outgoinghandshaker"
 	"github.com/cenkalti/rain/internal/peersource"
@@ -22,7 +20,7 @@ func (t *torrent) checkInfoHash(infoHash [20]byte) bool {
 func (t *torrent) handleIncomingHandshakeDone(ih *incominghandshaker.IncomingHandshaker) {
 	delete(t.incomingHandshakers, ih)
 	if ih.Error != nil {
-		delete(t.connectedPeerIPs, ih.Conn.RemoteAddr().(*net.TCPAddr).IP.String())
+		delete(t.connectedPeerIPs, ih.Conn.RemoteAddr().String())
 		return
 	}
 	t.startPeer(ih.Conn, peersource.Incoming, t.incomingPeers, ih.PeerID, ih.Extensions, ih.Cipher)
@@ -31,7 +29,7 @@ func (t *torrent) handleIncomingHandshakeDone(ih *incominghandshaker.IncomingHan
 func (t *torrent) handleOutgoingHandshakeDone(oh *outgoinghandshaker.OutgoingHandshaker) {
 	delete(t.outgoingHandshakers, oh)
 	if oh.Error != nil {
-		delete(t.connectedPeerIPs, oh.Addr.IP.String())
+		delete(t.connectedPeerIPs, oh.Addr.String())
 		t.dialAddresses()
 		return
 	}

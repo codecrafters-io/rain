@@ -100,7 +100,7 @@ func (t *torrent) dialAddresses() {
 			t.setNeedMorePeers(true)
 			return
 		}
-		ip := addr.IP.String()
+		ip := addr.String()
 		if _, ok := t.connectedPeerIPs[ip]; ok {
 			continue
 		}
